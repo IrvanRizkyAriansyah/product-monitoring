@@ -24,7 +24,7 @@ class Reject extends Model
 
     public function rejectType()
     {
-        return $this->belongsTo(Reject_Type::class);
+        return $this->belongsTo(RejectType::class);
     }
 
 }

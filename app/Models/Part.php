@@ -25,4 +25,10 @@ class Part extends Model
         return $this->hasMany(ProductionReport::class);
     }
 
+    public function partProcesses()
+    {
+        return $this->hasMany(
+            PartProcess::class
+        );
+    }
 }

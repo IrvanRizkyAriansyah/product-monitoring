@@ -14,14 +14,29 @@ class DowntimesTable
     {
         return $table
             ->columns([
-                TextColumn::make('created_at')
-                    ->dateTime()
+                TextColumn::make('report')
+                    ->label('Production Report')
+                    ->formatStateUsing(fn ($record) =>
+                        $record->report?->line?->name
+                        . ' | ' . $record->report?->shift?->name
+                        . ' | ' . $record->report?->report_date
+                    )
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
+                    ->searchable(),
+                TextColumn::make('machine.machine_name')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('start_time')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
+                TextColumn::make('end_time')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('duration_minutes')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('reason')
+                    ->searchable(),
             ])
             ->filters([
                 //

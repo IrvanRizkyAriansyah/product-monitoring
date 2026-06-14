@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\ProductionReports\Schemas;
 
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class ProductionReportForm
 {
@@ -15,48 +17,83 @@ class ProductionReportForm
     {
         return $schema
             ->components([
-                TextInput::make('line_id')
+
+                Select::make('line_id')
+                    ->label('Line')
+                    ->relationship('line', 'name')
+                    ->searchable()
+                    ->preload()
                     ->required()
-                    ->numeric(),
-                TextInput::make('part_id')
+                    ->disabled(fn () => Auth::user()?->hasRole('Operator')),
+
+                Select::make('part_id')
+                    ->label('Part')
+                    ->relationship('part', 'part_name')
+                    ->searchable()
+                    ->preload()
                     ->required()
-                    ->numeric(),
-                TextInput::make('shift_id')
+                    ->disabled(fn () => Auth::user()?->hasRole('Operator')),
+
+                Select::make('shift_id')
+                    ->label('Shift')
+                    ->relationship('shift', 'name')
+                    ->searchable()
+                    ->preload()
                     ->required()
-                    ->numeric(),
-                TextInput::make('leader_id')
-                    ->required()
-                    ->numeric(),
-                DatePicker::make('report_date')
-                    ->required(),
-                TextInput::make('total_target')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('total_actual')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('achievement')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
-                Select::make('status')
-                    ->options([
-            'draft' => 'Draft',
-            'submitted' => 'Submitted',
-            'approved' => 'Approved',
-            'rejected' => 'Rejected',
-        ])
-                    ->default('draft')
-                    ->required(),
+                    ->disabled(fn () => Auth::user()?->hasRole('Operator')),
+
+                Select::make('leader_id')
+                    ->label('Leader')
+                    ->relationship('leader', 'name')
+                    ->default(fn () => Auth::id())
+                    ->disabled(
+                        fn () => ! Auth::user()?->hasRole('Super Admin')
+                    )
+                    ->dehydrated(),
+
+                Hidden::make('status')
+                    ->default('draft'),
+
+                // Repeater::make('details')
+                //     ->relationship()
+                //     ->label('Production Detail')
+                //     ->schema([
+
+                //         DatePicker::make('report_date')
+                //             ->required(),
+
+                //         TextInput::make('target_qty')
+                //             ->label('Target')
+                //             ->numeric()
+                //             ->default(0)
+                //             ->required()
+                //             ->disabled(
+                //                 fn () =>
+                //                 ! Auth::user()?->hasAnyRole([
+                //                     'Leader',
+                //                     'Super Admin',
+                //                 ])
+                //             ),
+
+                //         TextInput::make('actual_qty')
+                //             ->label('Actual')
+                //             ->numeric()
+                //             ->default(0)
+                //             ->required()
+                //             ->disabled(
+                //                 fn () =>
+                //                 ! Auth::user()?->hasAnyRole([
+                //                     'Operator',
+                //                     'Super Admin',
+                //                 ])
+                //             ),
+                //     ])
+                //     ->defaultItems(1)
+                //     ->addActionLabel('Tambah Detail Produksi')
+                //     ->columnSpanFull(),
+
                 Textarea::make('notes')
-                    ->default(null)
                     ->columnSpanFull(),
-                TextInput::make('approved_by')
-                    ->numeric()
-                    ->default(null),
-                DateTimePicker::make('approved_at'),
             ]);
     }
 }

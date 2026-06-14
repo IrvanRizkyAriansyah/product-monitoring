@@ -17,7 +17,7 @@ return new class extends Migration
                 ->constrained('production_reports')
                 ->cascadeOnDelete();
 
-            $table->time('production_hour');
+            $table->time('report_date');
 
             $table->integer('target_qty')
                 ->default(0);

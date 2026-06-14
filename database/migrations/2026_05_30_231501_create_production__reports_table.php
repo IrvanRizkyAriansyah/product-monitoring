@@ -29,17 +29,6 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->date('report_date');
-
-            $table->integer('total_target')
-                ->default(0);
-
-            $table->integer('total_actual')
-                ->default(0);
-
-            $table->decimal('achievement', 5, 2)
-                ->default(0);
-
             $table->enum('status', [
                 'draft',
                 'submitted',

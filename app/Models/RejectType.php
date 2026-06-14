@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Reject_Type extends Model
+class RejectType extends Model
 {
     //
     use HasFactory;

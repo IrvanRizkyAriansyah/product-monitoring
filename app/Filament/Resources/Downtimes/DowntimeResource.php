@@ -13,12 +13,15 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class DowntimeResource extends Resource
 {
     protected static ?string $model = Downtime::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string |UnitEnum| null $navigationGroup = 'Production';
 
     protected static ?string $recordTitleAttribute = 'Downtime';
 

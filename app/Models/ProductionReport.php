@@ -15,10 +15,6 @@ class ProductionReport extends Model
         'part_id',
         'shift_id',
         'leader_id',
-        'report_date',
-        'total_target',
-        'total_actual',
-        'achievement',
         'status',
         'notes',
         'approved_by',
@@ -76,4 +72,32 @@ class ProductionReport extends Model
         return $this->hasMany(Approval::class, 'report_id');
     }
 
+    public function getTotalTargetAttribute()
+    {
+        return $this->details()->sum('target_qty');
+    }
+
+    public function getTotalActualAttribute()
+    {
+        return $this->details()->sum('actual_qty');
+    }
+
+    public function getAchievementAttribute()
+    {
+        $target = $this->total_target;
+
+        if ($target <= 0) {
+            return 0;
+        }
+
+        return round(
+            ($this->total_actual / $target) * 100,
+            2
+        );
+    }
+
+    public function getTableRecordKey($record): string
+    {
+        return (string) $record->id;
+    }
 }

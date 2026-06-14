@@ -12,7 +12,8 @@ class ProductionReportDetail extends Model
 
     protected $fillable = [
         'report_id',
-        'production_hour',
+        'part_process_id',
+        'report_date',
         'target_qty',
         'actual_qty',
     ];
@@ -22,4 +23,10 @@ class ProductionReportDetail extends Model
         return $this->belongsTo(ProductionReport::class, 'report_id');
     }
 
+    public function partProcess()
+{
+    return $this->belongsTo(
+        PartProcess::class
+    );
+}
 }

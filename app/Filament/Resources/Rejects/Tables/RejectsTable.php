@@ -14,23 +14,20 @@ class RejectsTable
     {
         return $table
             ->columns([
-                TextColumn::make('report_id')
-                    ->numeric()
+                TextColumn::make('report')
+                    ->label('Production Report')
+                    ->formatStateUsing(fn ($record) =>
+                        $record->report?->line?->name
+                        . ' | ' . $record->report?->shift?->name
+                        . ' | ' . $record->report?->report_date
+                    )
                     ->sortable(),
-                TextColumn::make('reject_type_id')
+                TextColumn::make('rejectType.name')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('qty')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
